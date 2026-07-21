@@ -35,6 +35,8 @@ void Graph_Explain
 	ExecutionCtx   *exec_ctx    = NULL ;
 	QueryCtx       *query_ctx   = QueryCtx_GetQueryCtx () ;
 
+	ASSERT (command_ctx->thread != EXEC_THREAD_MAIN) ;
+
 	Globals_TrackCommandCtx (command_ctx) ;
 
 	if (gc == NULL) {
