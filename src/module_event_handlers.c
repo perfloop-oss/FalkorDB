@@ -359,9 +359,6 @@ static void _ShutdownEventHandler
 		return; 
 	}
 
-	// drain any graph loads still parked waiting on another thread's load
-	GraphLoadQueue_Free () ;
-
 	// stop cron
 	Cron_Stop () ;
 
@@ -370,6 +367,9 @@ static void _ShutdownEventHandler
 
 	// stop threads before finalize GraphBLAS
 	ThreadPool_Destroy () ;
+
+	// drain any graph loads still parked waiting on another thread's load
+	GraphLoadQueue_Free () ;
 
 	// server is shutting down, finalize GraphBLAS
 	LAGraph_Finalize (NULL) ;
