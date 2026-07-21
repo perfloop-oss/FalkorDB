@@ -50,7 +50,7 @@ int Graph_Delete
 		if(type == GraphContextRedisModuleType ||
 		   (GraphStubType_Get != NULL && type == GraphStubType_Get())) {
 			deleted = true;
-			RedisModule_DeleteKey(key);  // untrack graph & decreases graph ref count
+			RedisModule_DeleteKey(key);  // delete key (untracks & decrements refcount for live graphs; stubs are just removed)
 			RedisModule_ReplyWithSimpleString(ctx, "OK");
 			// delete commands should always modify slaves
 			RedisModule_ReplicateVerbatim(ctx);
