@@ -29,6 +29,7 @@ static void _collect_stub_name
 	RedisModuleKey *key,
 	void *privdata
 ) {
+	UNUSED (ctx) ;
 	StubScanCtx *sctx = privdata;
 
 	if(RedisModule_ModuleTypeGetType(key) != sctx->stub_type) {
