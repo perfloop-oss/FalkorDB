@@ -225,18 +225,17 @@ void CommandCtx_ResumeAfterGraphLoad
 		}
 
 		// queue command
-		if (ThreadPool_AddWork (handler, command_ctx, false) !=
-				THPOOL_QUEUE_FULL) {
+		int rc = ThreadPool_AddWork (handler, command_ctx, false) ;
+		if (rc == 0) {
 			return ;
 		}
 
-		// pool queue is full - this is the thread pool's own general work
-		// queue (shared by every command, not just graph-loading waiters),
-		// a distinct resource from the per-graph load-wait list checked
-		// earlier in graphcontext_retrieve.c - fail the same way
-		// cmd_dispatcher.c does for that same condition
 		RedisModuleCtx *ctx = CommandCtx_GetRedisCtx (command_ctx) ;
-		RedisModule_ReplyWithError (ctx, EMSG_MAX_PENDING_QUERIES) ;
+		if (rc == THPOOL_QUEUE_FULL) {
+			RedisModule_ReplyWithError (ctx, EMSG_MAX_PENDING_QUERIES) ;
+		} else {
+			RedisModule_ReplyWithError (ctx, "ERR failed to resubmit command") ;
+		}
 	} else {
 		RedisModuleCtx *ctx = CommandCtx_GetRedisCtx (command_ctx) ;
 		RedisModule_ReplyWithErrorFormat (ctx,
