@@ -59,12 +59,13 @@ int Graph_List
 	RedisModule_ReplyWithArray (ctx, REDISMODULE_POSTPONED_LEN) ;
 
 	// reply with each live graph name
-	uint64_t     n   = Globals_GraphsCount () ;
+	uint64_t     n   = 0 ;
 	GraphContext *gc = NULL ;
 
 	while ((gc = GraphIterator_Next (&it)) != NULL) {
 		const char *name = GraphContext_GetName (gc) ;
 		RedisModule_ReplyWithStringBuffer (ctx, name, strlen (name)) ;
+		n++ ;
 		GraphContext_DecreaseRefCount (gc) ;
 	}
 
