@@ -207,6 +207,7 @@ void CommandCtx_ResumeAfterGraphLoad
 
 		switch (CommandFromString (CommandCtx_GetCommandName (command_ctx))) {
 			case CMD_QUERY:
+			case CMD_RO_QUERY:
 				handler = Graph_Query ;
 				break ;
 
