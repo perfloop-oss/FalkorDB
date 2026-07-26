@@ -1,0 +1,12 @@
+name: UNLABELED-SUM-ID-DENSE
+description: "Single-client full scan of one million unlabeled nodes with a non-reduced aggregate."
+db_config:
+  init_commands:
+    - ["GRAPH.QUERY", "graph", "UNWIND range(0, 999999) AS x CREATE ()"]
+parameters:
+  graph: graph
+  num_clients: 1
+  num_requests: 20
+  queries:
+    - query: "MATCH (n) RETURN sum(id(n))"
+      ratio: 1.0
