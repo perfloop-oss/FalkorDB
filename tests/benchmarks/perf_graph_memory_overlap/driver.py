@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import socket
 import subprocess
+import tempfile
 import sys
 import time
 
@@ -194,7 +195,10 @@ def _start_server(redis_server, module, dataset):
         raise FileNotFoundError(f"FalkorDB module not found: {module}")
 
     dataset.parent.mkdir(parents=True, exist_ok=True)
-    socket_path = dataset.with_suffix(".sock")
+    with tempfile.NamedTemporaryFile(
+        prefix="fdb-perf-", suffix=".sock", delete=False
+    ) as socket_file:
+        socket_path = Path(socket_file.name)
     log_path = dataset.with_suffix(".log")
     for path in (socket_path, log_path):
         path.unlink(missing_ok=True)
